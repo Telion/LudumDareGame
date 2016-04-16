@@ -2,6 +2,7 @@
 
 #include "ClientCharacter.h"
 #include "UniformSpriteSheet.h"
+#include "../common/Chunk.h"
 
 #include <SDL/SDL.h>
 
@@ -14,8 +15,10 @@ class Client
 	unsigned lastTime;
 
 	UniformSpriteSheet characterSprites;
+	UniformSpriteSheet terrainSprites;
 
 	ClientCharacter character;
+	Chunk chunk;
 
 public:
 	Client();
@@ -26,4 +29,7 @@ public:
 
 	void tick(int microseconds);
 	void render();
+
+	static const int screenWidth = 960;
+	static const int screenHeight = 720;
 };

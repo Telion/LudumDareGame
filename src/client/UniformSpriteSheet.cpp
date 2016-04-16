@@ -1,8 +1,8 @@
 #include "UniformSpriteSheet.h"
+#include "../common/MyAssert.h"
 
 #include <SDL/SDL.h>
 #include <SDL/SDL_image.h>
-#include <cassert>
 
 UniformSpriteSheet::UniformSpriteSheet()
 {
@@ -23,14 +23,14 @@ void UniformSpriteSheet::renderSprite(unsigned sprite, Position position, Positi
 	int spritesPerRow = sheetWidth / spriteWidth;
 	int spritesPerCol = sheetHeight / spriteHeight;
 
-	int row = sprite % spritesPerRow;
-	int col = sprite / spritesPerRow;
+	int col = sprite % spritesPerRow;
+	int row = sprite / spritesPerRow;
 
-	assert(col < spritesPerCol);
+	MyAssert(row < spritesPerCol);
 
 	SDL_Rect src;
-	src.x = row * spriteWidth;
-	src.y = col * spriteHeight;
+	src.x = col * spriteWidth;
+	src.y = row * spriteHeight;
 	src.w = spriteWidth;
 	src.h = spriteHeight;
 
@@ -41,5 +41,4 @@ void UniformSpriteSheet::renderSprite(unsigned sprite, Position position, Positi
 	dst.h = spriteHeight;
 
 	SDL_RenderCopy(renderer, texture, &src, &dst);
-	//SDL_BlitSurface(sheet, &src, destination, &dst);
 }

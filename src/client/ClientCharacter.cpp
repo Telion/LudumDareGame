@@ -25,3 +25,8 @@ void ClientCharacter::render(SDL_Renderer* renderer, const UniformSpriteSheet& s
 {
 	spriteSheet.renderSprite(0, position, base, renderer);
 }
+
+Position ClientCharacter::getPosition() const
+{
+	return position;
+}

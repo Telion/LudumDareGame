@@ -15,4 +15,6 @@ public:
 	void tick(int microseconds, unsigned char* keys);
 
 	void render(SDL_Renderer* renderer, const UniformSpriteSheet& spriteSheet, Position base);
+
+	Position getPosition() const;
 };

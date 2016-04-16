@@ -43,7 +43,7 @@ void gameLoop()
 	globalClient.gameLoop();
 }
 
-extern "C" int main(int argc, char** argv)
+extern "C" int main(int, char**)
 {
 	//clientSocket.reset(new ProcessSocket());
 	//clientSocket->linkToServer(clientSocket);

@@ -11,12 +11,12 @@ public:
 	virtual Packet receive() = 0;
 
 protected:
-	std::vector<unsigned char> packetToBytes(const Packet& packet)
+	std::vector<unsigned char> packetToBytes(const Packet&)
 	{
 		return std::vector<unsigned char>();
 	}
 
-	Packet bytesToPacket(const std::vector<unsigned char>& bytes)
+	Packet bytesToPacket(const std::vector<unsigned char>&)
 	{
 		return Packet();
 	}
