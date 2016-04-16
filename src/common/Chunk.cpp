@@ -63,7 +63,7 @@ Chunk::Chunk(int x, int y, const std::string& filename)
 
 }
 
-void Chunk::render(SDL_Renderer* renderer, const UniformSpriteSheet& spriteSheet, Position base)
+void Chunk::render(SDL_Renderer* renderer, const UniformSpriteSheet& spriteSheet, Position base, int screenWidth, int screenHeight)
 {
 	//if (!texture)
 	//{
@@ -94,14 +94,23 @@ void Chunk::render(SDL_Renderer* renderer, const UniformSpriteSheet& spriteSheet
 
 	//SDL_RenderCopy(renderer, texture, nullptr, &dest);
 
+	int spriteWidth = spriteSheet.getSpriteWidth();
+	int spriteHeight = spriteSheet.getSpriteHeight();
+
+	int x = this->x * chunkWidth * spriteWidth;
+	int y = this->y * chunkHeight * spriteHeight;
+
 	for (std::size_t i = 0; i < tiles.size(); ++i)
 	{
-		int tileX = i % chunkWidth;
-		int tileY = i / chunkWidth;
+		int tileX = i % chunkWidth * spriteWidth;
+		int tileY = i / chunkWidth * spriteHeight;
+
+		if (tileX > base.x + screenWidth || tileY > base.y + screenHeight || tileX + spriteWidth < base.x || tileY + spriteHeight < base.y)
+			continue;
 
 		Position position;
-		position.x = (this->x * chunkWidth + tileX) * spriteSheet.getSpriteWidth();
-		position.y = (this->y * chunkHeight + tileY) * spriteSheet.getSpriteHeight();
+		position.x = x + tileX;
+		position.y = y + tileY;
 
 		if (tiles[i].id != 0)
 			spriteSheet.renderSprite(tiles[i].id - firstgid, position, base, renderer);

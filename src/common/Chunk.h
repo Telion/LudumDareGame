@@ -20,7 +20,7 @@ public:
 	Chunk();
 	Chunk(int x, int y, const std::string& filename);
 
-	void render(SDL_Renderer* renderer, const UniformSpriteSheet& spriteSheet, Position base);
+	void render(SDL_Renderer* renderer, const UniformSpriteSheet& spriteSheet, Position base, int screenWidth, int screenHeight);
 
 	static const int chunkWidth = 64;
 	static const int chunkHeight = 64;

@@ -60,7 +60,7 @@ void Client::render()
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 	SDL_RenderFillRect(renderer, nullptr);
 
-	chunk.render(renderer, terrainSprites, base);
+	chunk.render(renderer, terrainSprites, base, screenWidth, screenHeight);
 	character.render(renderer, characterSprites, base);
 
 	SDL_RenderPresent(renderer);
