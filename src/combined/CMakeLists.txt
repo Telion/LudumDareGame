@@ -6,6 +6,6 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -W -Wall -Wfatal-errors -std=c++11 --pre
 add_executable(combined
 	../client/Client.cpp ../client/ClientCharacter.cpp ../client/ClientEntity.cpp ../client/main.cpp ../client/UniformSpriteSheet.cpp
 	../common/Chunk.cpp ../common/MyAssert.cpp ../common/ProcessSocket.cpp ../common/Tile.cpp
-	../server/ConnectionManager.cpp ../server/Server.h
+	../server/ClientManager.cpp ../server/Server.cpp ../server/ServerClient.cpp
 	../libs/tinyxml2.cpp
 )

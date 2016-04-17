@@ -2,19 +2,18 @@
 
 #include "../common/Socket.h"
 #include "../common/ProcessSocket.h"
+#include "ServerClient.h"
 
 #include <memory>
 
-class ConnectionManager
+class ClientManager
 {
-	std::vector<std::shared_ptr<Socket>> sockets;
+	std::vector<ServerClient> clients;
 
 public:
-	void addNewConnections();
-
-	const std::vector<std::shared_ptr<Socket>>& getSockets() const;
+	const std::vector<ServerClient>& getClients() const;
 
 	std::weak_ptr<ProcessSocket> connectFromProcessSocket(std::shared_ptr<ProcessSocket> clientSocket);
 };
 
-extern ConnectionManager connectionManager;
+ClientManager& getClientManager();

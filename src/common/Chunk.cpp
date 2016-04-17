@@ -59,8 +59,18 @@ Chunk::Chunk(int x, int y, const std::string& filename)
 	tiles = parseCsv(text);
 
 	MyAssert(tiles.size() == chunkWidth * chunkHeight);
+}
 
+Chunk::Chunk(int x, int y, const std::vector<Tile>& tiles)
+{
+	this->x = x;
+	this->y = y;
+	this->tiles = tiles;
+}
 
+void Chunk::markLoading()
+{
+	loading = true;
 }
 
 void Chunk::render(SDL_Renderer* renderer, const UniformSpriteSheet& spriteSheet, Position base, int screenWidth, int screenHeight)
@@ -105,7 +115,7 @@ void Chunk::render(SDL_Renderer* renderer, const UniformSpriteSheet& spriteSheet
 		int tileX = i % chunkWidth * spriteWidth;
 		int tileY = i / chunkWidth * spriteHeight;
 
-		if (tileX > base.x + screenWidth || tileY > base.y + screenHeight || tileX + spriteWidth < base.x || tileY + spriteHeight < base.y)
+		if (x + tileX > base.x + screenWidth || y + tileY > base.y + screenHeight || x + tileX + spriteWidth < base.x || y + tileY + spriteHeight < base.y)
 			continue;
 
 		Position position;
@@ -115,4 +125,19 @@ void Chunk::render(SDL_Renderer* renderer, const UniformSpriteSheet& spriteSheet
 		if (tiles[i].id != 0)
 			spriteSheet.renderSprite(tiles[i].id - firstgid, position, base, renderer);
 	}
+}
+
+bool Chunk::isValid() const
+{
+	return tiles.size() > 0;
+}
+
+const std::vector<Tile>& Chunk::getTiles() const
+{
+	return tiles;
+}
+
+bool Chunk::isLoading() const
+{
+	return loading;
 }
