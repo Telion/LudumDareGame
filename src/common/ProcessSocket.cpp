@@ -1,6 +1,7 @@
 #include "ProcessSocket.h"
 
-#include "../server/ConnectionManager.h"
+#include "../server/ClientManager.h"
+#include "MyAssert.h"
 
 ProcessSocket::ProcessSocket()
 {
@@ -9,7 +10,7 @@ ProcessSocket::ProcessSocket()
 
 void ProcessSocket::linkToServer(const std::shared_ptr<ProcessSocket>& sharedThis)
 {
-	pairedSocket = connectionManager.connectFromProcessSocket(sharedThis);
+	pairedSocket = getClientManager().connectFromProcessSocket(sharedThis);
 }
 
 void ProcessSocket::linkToClient(const std::shared_ptr<ProcessSocket>& client)
@@ -21,8 +22,9 @@ void ProcessSocket::send(const Packet& packet)
 {
 	std::shared_ptr<ProcessSocket> pairedSocket = this->pairedSocket.lock();
 
-	if (pairedSocket)
-		pairedSocket->pushPacket(packet);
+	MyAssert(pairedSocket);
+
+	pairedSocket->pushPacket(packet);
 }
 
 Packet ProcessSocket::receive()

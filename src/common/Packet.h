@@ -1,21 +1,29 @@
 #pragma once
 
+#include "Tile.h"
+
 #include <string>
+#include <vector>
 
 struct Packet
 {
 	enum class Type
 	{
 		none,
-		test,
-		//chunk,
+		//test,
+		chunk,
 		//clientTick,
 		//serverTick
 	};
 
 	Type type;
 
-	std::string message;
+	// For test
+	//std::string message;
+
+	// For chunk
+	int chunkX, chunkY;
+	std::vector<Tile> tiles;
 
 	static Packet empty()
 	{

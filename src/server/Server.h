@@ -1,14 +1,23 @@
 #pragma once
 
-#include "ConnectionManager.h"
+#include "ClientManager.h"
+#include "../common/Chunk.h"
+#include "ServerClient.h"
+#include "../common/Packet.h"
 
 #include <string>
+#include <utility>
+#include <map>
 
 //bool serverSent = false;
 //bool serverReceived = false;
 
 class Server
 {
+	void handleChunk(const ServerClient& client, const Packet& packet);
+
+	std::map<std::pair<int, int>, Chunk> chunkCache;
+
 public:
 	//static void testTick()
 	//{
@@ -36,4 +45,8 @@ public:
 	//		serverSent = true;
 	//	}
 	//}
+
+	Server();
+
+	void tick(int microseconds);
 };

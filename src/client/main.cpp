@@ -36,11 +36,10 @@
 //	}
 //}
 
-Client globalClient;
-
 void gameLoop()
 {
-	globalClient.gameLoop();
+	static Client client;
+	client.gameLoop();
 }
 
 extern "C" int main(int, char**)
