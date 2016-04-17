@@ -6,6 +6,7 @@
 #include "../common/Socket.h"
 #include "../common/Packet.h"
 #include "../server/Server.h"
+#include "../common/World.h"
 
 #include <SDL/SDL.h>
 #include <utility>
@@ -20,7 +21,7 @@ class Client
 
 	SDL_Window* window;
 	SDL_Renderer* renderer;
-	unsigned char* keys;
+	const unsigned char* keys;
 
 	unsigned lastTime;
 
@@ -28,7 +29,7 @@ class Client
 	UniformSpriteSheet terrainSprites;
 
 	ClientCharacter character;
-	std::map<std::pair<int, int>, Chunk> chunks;
+	World world;
 
 	void handleChunk(const Packet& packet);
 
@@ -40,7 +41,6 @@ public:
 	void gameLoop();
 
 	void readPackets();
-	void manageChunks();
 	void tick(int microseconds);
 	void render();
 

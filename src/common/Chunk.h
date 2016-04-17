@@ -14,7 +14,6 @@ class Chunk
 	std::vector<Tile> tiles;
 	int x;
 	int y;
-	int firstgid;
 
 	bool loading;
 
@@ -24,6 +23,8 @@ public:
 	Chunk(int x, int y, const std::vector<Tile>& tiles);
 
 	void markLoading();
+
+	Tile getTile(int x, int y) const;
 
 	void render(SDL_Renderer* renderer, const UniformSpriteSheet& spriteSheet, Position base, int screenWidth, int screenHeight);
 

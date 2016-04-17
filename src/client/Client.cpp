@@ -49,7 +49,7 @@ void Client::gameLoop()
 	keys = SDL_GetKeyboardState(nullptr);
 
 	readPackets();
-	manageChunks();
+	world.updateLoadedChunks(character.getPosition(), socket);
 	tick(delta);
 	render();
 }
@@ -74,48 +74,12 @@ void Client::readPackets()
 
 void Client::handleChunk(const Packet& packet)
 {
-	chunks[std::make_pair(packet.chunkX, packet.chunkY)] = Chunk(packet.chunkX, packet.chunkY, packet.tiles);
-}
-
-void Client::manageChunks()
-{
-	auto playerChunk = positionToChunkCoordinates(character.getPosition(), Chunk::chunkWidth, Chunk::chunkHeight);
-
-	std::vector<std::pair<int, int>> chunksToRemove;
-
-	for (auto p : chunks)
-	{
-		if (p.first.first < playerChunk.first - 2 || p.first.first > playerChunk.first + 2 || p.first.second < playerChunk.second - 2 || p.first.second > playerChunk.second + 2)
-			chunksToRemove.push_back(p.first);
-	}
-
-	for (auto p : chunksToRemove)
-	{
-		printf("Erasing chunk!\n");
-		chunks.erase(p);
-	}
-
-	for (int i = playerChunk.first - 1; i <= playerChunk.first + 1; ++i)
-		for (int j = playerChunk.second - 1; j <= playerChunk.second + 1; ++j)
-		{
-			if (chunks.find(std::make_pair(i, j)) == chunks.end())
-			{
-				Chunk loadingChunk;
-				loadingChunk.markLoading();
-				chunks[std::make_pair(i, j)] = loadingChunk;
-
-				Packet packet;
-				packet.type = Packet::Type::chunk;
-				packet.chunkX = i;
-				packet.chunkY = j;
-				socket->send(packet);
-			}
-		}
+	world.setChunk(packet.chunkX, packet.chunkY, Chunk(packet.chunkX, packet.chunkY, packet.tiles));
 }
 
 void Client::tick(int microseconds)
 {
-	character.tick(microseconds, keys);
+	character.tick(microseconds, keys, world);
 }
 
 void Client::render()
@@ -127,10 +91,7 @@ void Client::render()
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 	SDL_RenderFillRect(renderer, nullptr);
 
-	for (auto p : chunks)
-	{
-		p.second.render(renderer, terrainSprites, base, screenWidth, screenHeight);
-	}
+	world.render(renderer, terrainSprites, base, screenWidth, screenHeight);
 
 	character.render(renderer, characterSprites, base);
 
