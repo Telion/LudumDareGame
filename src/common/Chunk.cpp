@@ -10,7 +10,7 @@
 #include <cstdio>
 #include <sstream>
 
-std::vector<Tile> parseCsv(const std::string& str)
+std::vector<Tile> parseCsv(const std::string& str, int firstgid)
 {
 	std::stringstream ss(str);
 	std::vector<Tile> result;
@@ -22,6 +22,7 @@ std::vector<Tile> parseCsv(const std::string& str)
 		{
 			Tile tile;
 			ss >> tile.id;
+			tile.id -= firstgid;
 			result.push_back(tile);
 		}
 		else
@@ -49,6 +50,7 @@ Chunk::Chunk(int x, int y, const std::string& filename)
 
 	tinyxml2::XMLElement* map = doc.FirstChildElement("map");
 	tinyxml2::XMLElement* tileset = map->FirstChildElement("tileset");
+	int firstgid;
 	error = tileset->QueryIntAttribute("firstgid", &firstgid);
 	MyAssert(error == tinyxml2::XMLError::XML_SUCCESS);
 
@@ -56,7 +58,7 @@ Chunk::Chunk(int x, int y, const std::string& filename)
 	tinyxml2::XMLElement* data = layer->FirstChildElement("data");
 	std::string text = data->GetText();
 
-	tiles = parseCsv(text);
+	tiles = parseCsv(text, firstgid);
 
 	MyAssert(tiles.size() == chunkWidth * chunkHeight);
 }
@@ -71,6 +73,16 @@ Chunk::Chunk(int x, int y, const std::vector<Tile>& tiles)
 void Chunk::markLoading()
 {
 	loading = true;
+}
+
+Tile Chunk::getTile(int x, int y) const
+{
+	MyAssert(x >= 0);
+	MyAssert(y >= 0);
+	MyAssert(x < chunkWidth);
+	MyAssert(y < chunkHeight);
+
+	return tiles[y * chunkWidth + x];
 }
 
 void Chunk::render(SDL_Renderer* renderer, const UniformSpriteSheet& spriteSheet, Position base, int screenWidth, int screenHeight)
@@ -122,8 +134,8 @@ void Chunk::render(SDL_Renderer* renderer, const UniformSpriteSheet& spriteSheet
 		position.x = x + tileX;
 		position.y = y + tileY;
 
-		if (tiles[i].id != 0)
-			spriteSheet.renderSprite(tiles[i].id - firstgid, position, base, renderer);
+		if (tiles[i].id != -1)
+			spriteSheet.renderSprite(tiles[i].id, position, base, renderer);
 	}
 }
 
