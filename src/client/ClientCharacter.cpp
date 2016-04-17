@@ -19,6 +19,8 @@ ClientCharacter::ClientCharacter()
 
 void ClientCharacter::tick(int microseconds, const unsigned char* keys, const World& world)
 {
+	lastPosition = position;
+
 	bool left = keys[SDL_SCANCODE_A] || keys[SDL_SCANCODE_LEFT];
 	bool right = !left && (keys[SDL_SCANCODE_D] || keys[SDL_SCANCODE_RIGHT]);
 	bool up = keys[SDL_SCANCODE_W] || keys[SDL_SCANCODE_UP];
@@ -99,9 +101,11 @@ void ClientCharacter::tick(int microseconds, const unsigned char* keys, const Wo
 	position.y = newY;
 }
 
-void ClientCharacter::render(SDL_Renderer* renderer, const UniformSpriteSheet& spriteSheet, Position base)
+void ClientCharacter::render(SDL_Renderer* renderer, const UniformSpriteSheet& spriteSheet, Position base, double fractionNew)
 {
-	spriteSheet.renderSprite(0, position, base, renderer);
+	Position p = lerp(lastPosition, position, fractionNew);
+
+	spriteSheet.renderSprite(0, p, base, renderer);
 }
 
 Position ClientCharacter::getPosition() const

@@ -3,6 +3,7 @@
 #include "../common/VectorMath.h"
 #include "../common/Packet.h"
 #include "../common/ProcessSocket.h"
+#include "../common/ClientAction.h"
 
 #include <SDL/SDL.h>
 #include <SDL/SDL_image.h>
@@ -23,6 +24,10 @@ Client::Client()
 	terrainSprites = UniformSpriteSheet(renderer, "../../src/client/resources/terrainSprites.png", 64, 64);
 
 	lastTime = emscripten_get_now() * 1000;
+	remainderTime = 0;
+	lastTickTime = lastTime;
+
+	positionLastTimestep = character.getPosition();
 }
 
 Client::~Client()
@@ -43,6 +48,7 @@ void Client::gameLoop()
 	if (delta > 300000)
 		delta = 300000;
 
+	// For built-in server only
 	server.tick(delta);
 
 	SDL_PumpEvents();
@@ -50,8 +56,39 @@ void Client::gameLoop()
 
 	readPackets();
 	world.updateLoadedChunks(character.getPosition(), socket);
-	tick(delta);
+
+	remainderTime += delta;
+	while (remainderTime >= timestep)
+	{
+		positionLastTimestep = character.getPosition();
+		tick(timestep);
+
+		ClientAction action;
+		action.time = time - remainderTime;
+		action.position = character.getPosition();
+		actionLog.push_back(action);
+
+		remainderTime -= timestep;
+	}
+
+	if (time - lastTickTime >= 250000)
+	{
+		sendTick();
+	}
+
 	render();
+}
+
+void Client::sendTick()
+{
+	Packet packet;
+	packet.type = Packet::Type::clientTick;
+	packet.actionLog = actionLog;
+
+	socket->send(packet);
+
+	lastTickTime = lastTime;
+	actionLog.clear();
 }
 
 void Client::readPackets()
@@ -84,16 +121,17 @@ void Client::tick(int microseconds)
 
 void Client::render()
 {
-	Position base;
-	base.x = character.getPosition().x - (screenWidth - 96) / 2;
-	base.y = character.getPosition().y - (screenHeight - 96) / 2;
+	double factor = (double)remainderTime / timestep;
+	Position base = lerp(positionLastTimestep, character.getPosition(), factor);
+	base.x -= (screenWidth - 96) / 2;
+	base.y -= (screenHeight - 96) / 2;
 
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 	SDL_RenderFillRect(renderer, nullptr);
 
 	world.render(renderer, terrainSprites, base, screenWidth, screenHeight);
 
-	character.render(renderer, characterSprites, base);
+	character.render(renderer, characterSprites, base, factor);
 
 	SDL_RenderPresent(renderer);
 	SDL_UpdateWindowSurface(window);

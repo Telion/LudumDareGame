@@ -7,6 +7,7 @@
 #include "../common/Packet.h"
 #include "../server/Server.h"
 #include "../common/World.h"
+#include "../common/VectorMath.h"
 
 #include <SDL/SDL.h>
 #include <utility>
@@ -24,6 +25,9 @@ class Client
 	const unsigned char* keys;
 
 	unsigned lastTime;
+	unsigned remainderTime;
+
+	Position positionLastTimestep;
 
 	UniformSpriteSheet characterSprites;
 	UniformSpriteSheet terrainSprites;
@@ -31,7 +35,13 @@ class Client
 	ClientCharacter character;
 	World world;
 
+	std::vector<ClientAction> actionLog;
+	unsigned lastTickTime;
+
 	void handleChunk(const Packet& packet);
+	void sendTick();
+
+	static const unsigned timestep = 25000;
 
 public:
 	Client();

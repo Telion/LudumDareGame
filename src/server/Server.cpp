@@ -25,6 +25,9 @@ void Server::tick(int /*microseconds*/)
 			case Packet::Type::chunk:
 				handleChunk(client, packet);
 				break;
+			case Packet::Type::clientTick:
+				handleClientTick(client, packet);
+				break;
 			default:
 				printf("Server received unsupported packet type: %d from client %d\n", packet.type, client.id);
 			}
@@ -66,4 +69,9 @@ void Server::handleChunk(const ServerClient& client, const Packet& packet)
 	response.tiles = chunk.getTiles();
 
 	client.socket->send(response);
+}
+
+void Server::handleClientTick(const ServerClient& /*client*/, const Packet& packet)
+{
+	printf("Client tick with %d action logs\n", packet.actionLog.size());
 }
