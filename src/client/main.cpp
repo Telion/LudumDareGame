@@ -9,33 +9,6 @@
 
 #include <emscripten.h>
 
-//std::shared_ptr<ProcessSocket> clientSocket;
-//bool sent = false;
-//bool received = false;
-
-//void testTick()
-//{
-//	if (!sent)
-//	{
-//		Packet packet;
-//		packet.type = Packet::Type::test;
-//		packet.message = "Hello server!";
-//		clientSocket->send(packet);
-//		packet.message = "Hello server again!";
-//		clientSocket->send(packet);
-//		sent = true;
-//	}
-//	else if (!received)
-//	{
-//		Packet packet = clientSocket->receive();
-//		if (packet.type == Packet::Type::test)
-//		{
-//			printf("Received %s\n", packet.message.c_str());
-//			received = true;
-//		}
-//	}
-//}
-
 void gameLoop()
 {
 	static Client client;

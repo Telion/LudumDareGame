@@ -33,3 +33,12 @@ inline std::pair<int, int> tileToChunkCoordinates(int tileX, int tileY, int chun
 
 	return std::make_pair(tileX / chunkWidth, tileY / chunkHeight);
 }
+
+inline Position lerp(Position a, Position b, double fractionB)
+{
+	Position p;
+	p.x = a.x * (1 - fractionB) + b.x * fractionB;
+	p.y = a.y * (1 - fractionB) + b.y * fractionB;
+
+	return p;
+}

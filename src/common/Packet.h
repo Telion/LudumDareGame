@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Tile.h"
+#include "ClientAction.h"
 
 #include <string>
 #include <vector>
@@ -12,7 +13,7 @@ struct Packet
 		none,
 		//test,
 		chunk,
-		//clientTick,
+		clientTick,
 		//serverTick
 	};
 
@@ -24,6 +25,9 @@ struct Packet
 	// For chunk
 	int chunkX, chunkY;
 	std::vector<Tile> tiles;
+
+	// For clientTick
+	std::vector<ClientAction> actionLog;
 
 	static Packet empty()
 	{
