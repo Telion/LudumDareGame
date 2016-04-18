@@ -299,6 +299,6 @@ int Client::entityTypeToSprite(CommonEntity::Type type) const
 	case CommonEntity::Type::sword:
 		return 2;
 	case CommonEntity::Type::spawner:
-		return 0;
+		return 4;
 	}
 }

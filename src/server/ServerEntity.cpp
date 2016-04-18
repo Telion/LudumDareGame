@@ -110,7 +110,7 @@ void ServerEntity::tick(unsigned time, int delta, const World& world, std::vecto
 	}
 	else
 	{
-		const double speed = 175;
+		const double speed = 160;
 
 		auto touchingPlayers = getEntitiesWithin(entities, 72, CommonEntity::Type::player);
 		if (!touchingPlayers.empty())
@@ -119,7 +119,7 @@ void ServerEntity::tick(unsigned time, int delta, const World& world, std::vecto
 			emscripten_cancel_main_loop();
 		}
 
-		auto entitiesNearby = getEntitiesWithin(entities, 7.0 * 64, CommonEntity::Type::player);
+		auto entitiesNearby = getEntitiesWithin(entities, 12.0 * 48, CommonEntity::Type::player);
 
 		if (!entitiesNearby.empty())
 		{

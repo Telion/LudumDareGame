@@ -253,4 +253,26 @@ void Server::loadChunk(int x, int y, const std::string& filename)
 	MyAssert(tiles.size() == Chunk::chunkWidth * Chunk::chunkHeight);
 
 	world.setChunk(x, y, Chunk(x, y, tiles));
+
+	tinyxml2::XMLElement* objectGroup = map->FirstChildElement("objectgroup");
+	if (objectGroup)
+	{
+		tinyxml2::XMLElement* object = objectGroup->FirstChildElement("object");
+		while (object)
+		{
+			double spawnerX, spawnerY;
+			error = object->QueryDoubleAttribute("x", &spawnerX);
+			MyAssert(error == tinyxml2::XMLError::XML_SUCCESS);
+			error = object->QueryDoubleAttribute("y", &spawnerY);
+			MyAssert(error == tinyxml2::XMLError::XML_SUCCESS);
+
+			spawnerX += x * Chunk::chunkWidth * 64;
+			spawnerY += y * Chunk::chunkHeight * 64 - 96;
+
+			std::shared_ptr<ServerEntity> spawner(new ServerEntity(CommonEntity::Type::spawner, Vector2(spawnerX, spawnerY)));
+			newEntities.push_back(spawner);
+
+			object = object->NextSiblingElement();
+		}
+	}
 }
