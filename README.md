@@ -26,5 +26,6 @@ Concept Artist & Designer: Wendy Wang/ Ebellefly
 
 Level Designer and Pair Programmer: Tina Wang
  - Created tiles aside from Wendy's work to build some mountains, earthy elements, pathways, picket fences, green cobblestone.
+ - Created maps.
  - Pair programmed with Christopher to offer suggestions, help debug, and be the rubber ducky :).
  - Used Gimp, Tiled Map Editor, and Microsoft Paint.
