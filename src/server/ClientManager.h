@@ -11,7 +11,7 @@ class ClientManager
 	std::vector<ServerClient> clients;
 
 public:
-	const std::vector<ServerClient>& getClients() const;
+	std::vector<ServerClient>& getClients();
 
 	std::weak_ptr<ProcessSocket> connectFromProcessSocket(std::shared_ptr<ProcessSocket> clientSocket);
 };

@@ -4,13 +4,12 @@
 #include "../common/Chunk.h"
 #include "../common/Tile.h"
 #include "../common/World.h"
+#include "../common/CollisionResolution.h"
 
 #include <SDL/SDL.h>
 #include <map>
 #include <utility>
 #include <cmath>
-
-const double epsilon = .01;
 
 ClientCharacter::ClientCharacter()
 {
@@ -26,16 +25,19 @@ void ClientCharacter::tick(int microseconds, const unsigned char* keys, const Wo
 	bool up = keys[SDL_SCANCODE_W] || keys[SDL_SCANCODE_UP];
 	bool down = !up && (keys[SDL_SCANCODE_S] || keys[SDL_SCANCODE_DOWN]);
 
-	int numDirections = (int)left + (int)right + (int)up + (int)down;
+	if (!left && !right && !up && !down)
+		return;
 
-	double speed = this->speed * microseconds / 1000000;
-	if (numDirections == 2)
-		speed /= 1.41421356237;
+	Vector2 movement((int)right - (int)left, (int)down - (int)up);
+	movement = normalize(movement) * this->speed * microseconds / 1000000;
 
-	double newX = position.x - left * speed + right * speed;
-	double newY = position.y - up * speed + down * speed;
+	Rect oldPos(position.x, position.y, width, height);
+	//Rect newPos(position.x - left * speed + right * speed, position.y - up * speed + down * speed, width, height);
+	Rect newPos(position.x + movement.x, position.y + movement.y, width, height);
 
-	int currentTileX = floor(position.x / 64), currentTileXRight = floor((position.x + width) / 64), currentTileY = floor(position.y / 64), currentTileYBottom = floor((position.y + height) / 64);
+	position = resolveCollisions(oldPos, newPos, world);
+
+	/*int currentTileX = floor(position.x / 64), currentTileXRight = floor((position.x + width) / 64), currentTileY = floor(position.y / 64), currentTileYBottom = floor((position.y + height) / 64);
 	int newTileX = floor(newX / 64), newTileXRight = floor((newX + width) / 64), newTileY = floor(newY / 64), newTileYBottom = floor((newY + height) / 64);
 
 	if (left)
@@ -95,20 +97,20 @@ void ClientCharacter::tick(int microseconds, const unsigned char* keys, const Wo
 				}
 			}
 	end_down:;
-	}
+	}*/
 
-	position.x = newX;
-	position.y = newY;
+	//position.x = newX;
+	//position.y = newY;
 }
 
-void ClientCharacter::render(SDL_Renderer* renderer, const UniformSpriteSheet& spriteSheet, Position base, double fractionNew)
+void ClientCharacter::render(SDL_Renderer* renderer, const UniformSpriteSheet& spriteSheet, int sprite, Vector2 base, double fractionNew)
 {
-	Position p = lerp(lastPosition, position, fractionNew);
+	Vector2 p = lerp(lastPosition, position, fractionNew);
 
-	spriteSheet.renderSprite(0, p, base, renderer);
+	spriteSheet.renderSprite(sprite, p, base, renderer);
 }
 
-Position ClientCharacter::getPosition() const
+Vector2 ClientCharacter::getPosition() const
 {
 	return position;
 }

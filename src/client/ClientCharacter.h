@@ -9,19 +9,21 @@
 
 class ClientCharacter
 {
-	Position position;
-	Position lastPosition;
+	Vector2 position;
+	Vector2 lastPosition;
 
 	double speed = 200.0;
 	int width = 96;
 	int height = 96;
 
 public:
+	long long id;
+
 	ClientCharacter();
 
 	void tick(int microseconds, const unsigned char* keys, const World& world);
 
-	void render(SDL_Renderer* renderer, const UniformSpriteSheet& spriteSheet, Position base, double fractionNew);
+	void render(SDL_Renderer* renderer, const UniformSpriteSheet& spriteSheet, int sprite, Vector2 base, double fractionNew);
 
-	Position getPosition() const;
+	Vector2 getPosition() const;
 };

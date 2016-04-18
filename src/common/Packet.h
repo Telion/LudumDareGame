@@ -1,7 +1,8 @@
 #pragma once
 
 #include "Tile.h"
-#include "ClientAction.h"
+#include "Action.h"
+#include "CommonEntity.h"
 
 #include <string>
 #include <vector>
@@ -12,9 +13,10 @@ struct Packet
 	{
 		none,
 		//test,
+		connect,
 		chunk,
 		clientTick,
-		//serverTick
+		serverTick
 	};
 
 	Type type;
@@ -22,12 +24,18 @@ struct Packet
 	// For test
 	//std::string message;
 
+	// For connect
+	long long id;
+
 	// For chunk
 	int chunkX, chunkY;
 	std::vector<Tile> tiles;
 
 	// For clientTick
-	std::vector<ClientAction> actionLog;
+	std::vector<Action> actionLog;
+
+	// For serverTick
+	std::vector<CommonEntity> entities;
 
 	static Packet empty()
 	{

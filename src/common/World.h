@@ -9,6 +9,8 @@
 #include <map>
 #include <memory>
 
+class Chunk;
+
 class World
 {
 	std::map<std::pair<int, int>, Chunk> chunks;
@@ -22,7 +24,7 @@ public:
 
 	Tile getTile(int x, int y) const;
 
-	void updateLoadedChunks(Position playerPosition, const std::shared_ptr<Socket>& socket);
+	void updateLoadedChunks(Vector2 playerPosition, const std::shared_ptr<Socket>& socket);
 
-	void render(SDL_Renderer* renderer, const UniformSpriteSheet& terrainSprites, Position base, int screenWidth, int screenHeight) const;
+	void render(SDL_Renderer* renderer, const UniformSpriteSheet& terrainSprites, Vector2 base, int screenWidth, int screenHeight) const;
 };

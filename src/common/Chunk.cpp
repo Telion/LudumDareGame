@@ -1,6 +1,5 @@
 #include "Chunk.h"
 
-#include "../libs/tinyxml2.h"
 #include "Tile.h"
 #include "VectorMath.h"
 #include "../client/UniformSpriteSheet.h"
@@ -10,57 +9,9 @@
 #include <cstdio>
 #include <sstream>
 
-std::vector<Tile> parseCsv(const std::string& str, int firstgid)
-{
-	std::stringstream ss(str);
-	std::vector<Tile> result;
-
-	while (ss)
-	{
-		char nextChar = ss.peek();
-		if (nextChar >= '0' && nextChar <= '9')
-		{
-			Tile tile;
-			ss >> tile.id;
-			tile.id -= firstgid;
-			result.push_back(tile);
-		}
-		else
-		{
-			ss.get();
-		}
-	}
-
-	return result;
-}
-
 Chunk::Chunk()
 {
 
-}
-
-Chunk::Chunk(int x, int y, const std::string& filename)
-{
-	this->x = x;
-	this->y = y;
-
-	tinyxml2::XMLDocument doc;
-	tinyxml2::XMLError error = doc.LoadFile(filename.c_str());
-	MyAssert(error == tinyxml2::XMLError::XML_SUCCESS);
-
-	tinyxml2::XMLElement* map = doc.FirstChildElement("map");
-	tinyxml2::XMLElement* tileset = map->FirstChildElement("tileset");
-	int firstgid;
-	error = tileset->QueryIntAttribute("firstgid", &firstgid);
-	MyAssert(error == tinyxml2::XMLError::XML_SUCCESS);
-
-	tinyxml2::XMLElement* layer = map->FirstChildElement("layer");
-	tinyxml2::XMLElement* data = layer->FirstChildElement("data");
-	std::string text = data->GetText();
-
-	tiles = parseCsv(text, firstgid);
-
-	MyAssert(tiles.size() == chunkWidth * chunkHeight);
 }
 
 Chunk::Chunk(int x, int y, const std::vector<Tile>& tiles)
@@ -85,7 +36,7 @@ Tile Chunk::getTile(int x, int y) const
 	return tiles[y * chunkWidth + x];
 }
 
-void Chunk::render(SDL_Renderer* renderer, const UniformSpriteSheet& spriteSheet, Position base, int screenWidth, int screenHeight)
+void Chunk::render(SDL_Renderer* renderer, const UniformSpriteSheet& spriteSheet, Vector2 base, int screenWidth, int screenHeight)
 {
 	//if (!texture)
 	//{
@@ -97,7 +48,7 @@ void Chunk::render(SDL_Renderer* renderer, const UniformSpriteSheet& spriteSheet
 	//		int tileX = i % chunkWidth;
 	//		int tileY = i / chunkWidth;
 
-	//		Position position;
+	//		Vector2 position;
 	//		position.x = (this->x * chunkWidth + tileX) * spriteSheet.getSpriteWidth();
 	//		position.y = (this->y * chunkHeight + tileY) * spriteSheet.getSpriteHeight();
 
@@ -130,7 +81,7 @@ void Chunk::render(SDL_Renderer* renderer, const UniformSpriteSheet& spriteSheet
 		if (x + tileX > base.x + screenWidth || y + tileY > base.y + screenHeight || x + tileX + spriteWidth < base.x || y + tileY + spriteHeight < base.y)
 			continue;
 
-		Position position;
+		Vector2 position;
 		position.x = x + tileX;
 		position.y = y + tileY;
 

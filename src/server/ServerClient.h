@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../common/Socket.h"
+#include "ServerEntity.h"
 
 #include <memory>
 
@@ -11,4 +12,5 @@ public:
 
 	int id;
 	std::shared_ptr<Socket> socket;
+	std::shared_ptr<ServerEntity> entity;
 };

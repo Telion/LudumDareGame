@@ -27,21 +27,28 @@ class Client
 	unsigned lastTime;
 	unsigned remainderTime;
 
-	Position positionLastTimestep;
+	Vector2 positionLastTimestep;
 
 	UniformSpriteSheet characterSprites;
 	UniformSpriteSheet terrainSprites;
+	UniformSpriteSheet enemySprites;
 
 	ClientCharacter character;
 	World world;
+	std::map<long long, CommonEntity> entities;
 
-	std::vector<ClientAction> actionLog;
+	std::vector<Action> actionLog;
 	unsigned lastTickTime;
 
 	void handleChunk(const Packet& packet);
+	void handleServerTick(const Packet& packet);
 	void sendTick();
+	void renderCommonEntity(SDL_Renderer* renderer, const CommonEntity& entity, unsigned time, Vector2 base);
+	int entityTypeToSprite(CommonEntity::Type type) const;
 
 	static const unsigned timestep = 25000;
+	static const unsigned tickTime = 150000;
+	static const unsigned serverRenderingLag = 300000;
 
 public:
 	Client();
@@ -52,7 +59,7 @@ public:
 
 	void readPackets();
 	void tick(int microseconds);
-	void render();
+	void render(unsigned time);
 
 	static const int screenWidth = 960;
 	static const int screenHeight = 720;
