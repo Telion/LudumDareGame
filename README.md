@@ -20,8 +20,11 @@ Team Strawberry
 Core Programmer: Christopher Mueller
  - Setup work environment & technologies
  - Implemented server & client simulation, enemy and player character movement, enemy spawner, enemy and player combat system.
+
 Concept Artist & Designer: Wendy Wang/ Ebellefly
  - Concept art of Strawberry Samurai, Ninja pomegranate, raw grass and water tiles, and Pear Castle. See attached photo of Pear Castle for higher detail. She drew amazing art :).
+
 Level Designer and Pair Programmer: Tina Wang
  - Created tiles aside from Wendy's work to build some mountains, earthy elements, pathways, picket fences, green cobblestone.
+ - Pair programmed with Christopher to offer suggestions, help debug, and be the rubber ducky :).
  - Used Gimp, Tiled Map Editor, and Microsoft Paint.
