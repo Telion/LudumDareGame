@@ -14,8 +14,6 @@ Server::Server()
 {
 	TRACE;
 
-	entities.push_back(std::shared_ptr<ServerEntity>(new ServerEntity(CommonEntity::Type::ninjaPommey, Vector2())));
-
 	lastTime = emscripten_get_now() * 1000;
 	remainderTime = 0;
 	lastTickTime = lastTime;
@@ -47,6 +45,26 @@ void Server::serverLoop()
 	{
 		sendTicks();
 	}
+
+	for (const auto& entity : newEntities)
+	{
+		entities.push_back(entity);
+	}
+	newEntities.clear();
+
+	for (const auto& entity : deletedEntities)
+	{
+		for (std::size_t i = 0; i < entities.size(); ++i)
+		{
+			if (entities[i]->common.id == entity->common.id)
+			{
+				entities[i] = entities.back();
+				entities.pop_back();
+				break;
+			}
+		}
+	}
+	deletedEntities.clear();
 }
 
 void Server::sendTicks()
@@ -62,7 +80,17 @@ void Server::sendTicks()
 	{
 		packet.entities.push_back(e->common);
 
-		e->common.actionLog.clear();
+		// Erase old actions that are no longer relevant
+		std::size_t i = 0;
+		for (; i < e->common.actionLog.size(); ++i)
+		{
+			if (e->common.actionLog[i].time >= lastTime - interpolationDelay * 2)
+				break;
+		}
+		if (i + 1 >= e->common.actionLog.size())
+			e->common.actionLog.clear();
+		else if (i >= 1)
+			e->common.actionLog = std::vector<Action>(e->common.actionLog.begin() + i - 1, e->common.actionLog.end());
 	}
 
 	for (ServerClient& client : getClientManager().getClients())
@@ -79,7 +107,7 @@ void Server::tick(unsigned time, int delta)
 
 	for (std::size_t i = 0; i < entities.size(); ++i)
 	{
-		entities[i]->tick(time - interpolationDelay, delta, world, entities);
+		entities[i]->tick(time - interpolationDelay, delta, world, entities, newEntities, deletedEntities);
 	}
 }
 
@@ -94,7 +122,7 @@ void Server::handlePackets()
 		if (!client.entity)
 		{
 			// Create an entity for this new player
-			client.entity.reset(new ServerEntity(CommonEntity::Type::player, Vector2()));
+			client.entity.reset(new ServerEntity(CommonEntity::Type::player, Vector2(64 * 32, 64 * 45)));
 			entities.push_back(client.entity);
 
 			Packet packet;
@@ -165,7 +193,15 @@ void Server::handleClientTick(const ServerClient& client, const Packet& packet)
 	auto& actionLog = client.entity->common.actionLog;
 
 	for (auto& action : packet.actionLog)
+	{
+		for (std::size_t i = 0; i < actionLog.size(); ++i)
+			if (actionLog[i].id == action.id)
+				goto next;
+
 		actionLog.push_back(action);
+
+	next:;
+	}
 }
 
 std::vector<Tile> parseCsv(const std::string& str, int firstgid)

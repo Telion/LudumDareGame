@@ -2,10 +2,10 @@
 
 #include "World.h"
 
+const double epsilon = .01;
+
 Vector2 resolveCollisions(Rect start, Rect end, const World& world)
 {
-	const double epsilon = .01;
-
 	Vector2 result(end.x, end.y);
 
 	int currentTileX = floor(start.x / 64), currentTileXRight = floor((start.x + start.w) / 64), currentTileY = floor(start.y / 64), currentTileYBottom = floor((start.y + start.h) / 64);
@@ -71,4 +71,11 @@ Vector2 resolveCollisions(Rect start, Rect end, const World& world)
 	}
 
 	return result;
+}
+
+bool collides(Rect start, Rect end, const World& world)
+{
+	Vector2 afterResolution = resolveCollisions(start, end, world);
+
+	return afterResolution.x < end.x - 2 * epsilon || afterResolution.x > end.x + 2 * epsilon || afterResolution.y < end.y - 2 * epsilon || afterResolution.y > end.y + 2 * epsilon;
 }

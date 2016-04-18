@@ -11,10 +11,12 @@ struct CommonEntity
 	{
 		player = 0,
 		ninjaPommey = 1,
-		sword = 2
+		sword = 2,
+		spawner = 3
 	};
 
 	long long id;
 	Type type;
 	std::vector<Action> actionLog;
+	double rotation;
 };

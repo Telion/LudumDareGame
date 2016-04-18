@@ -1,11 +1,13 @@
 #pragma once
 
+#include "../common/Action.h"
 #include "../common/World.h"
 #include "../common/VectorMath.h"
 #include "UniformSpriteSheet.h"
 
 #include <SDL/SDL.h>
 #include <map>
+#include <vector>
 
 class ClientCharacter
 {
@@ -16,12 +18,16 @@ class ClientCharacter
 	int width = 96;
 	int height = 96;
 
+	unsigned lastShotTime;
+	static const int shotDelay = 600000;
+
 public:
 	long long id;
+	std::vector<Action> actionLog;
 
 	ClientCharacter();
 
-	void tick(int microseconds, const unsigned char* keys, const World& world);
+	void tick(unsigned time, int delta, const unsigned char* keys, bool mouseDown, int mouseX, int mouseY, const World& world);
 
 	void render(SDL_Renderer* renderer, const UniformSpriteSheet& spriteSheet, int sprite, Vector2 base, double fractionNew);
 

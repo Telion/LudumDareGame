@@ -17,7 +17,7 @@ UniformSpriteSheet::UniformSpriteSheet(SDL_Renderer* renderer, const std::string
 	this->spriteHeight = spriteHeight;
 }
 
-void UniformSpriteSheet::renderSprite(unsigned sprite, Vector2 position, Vector2 base, SDL_Renderer* renderer) const
+void UniformSpriteSheet::renderSprite(unsigned sprite, Vector2 position, Vector2 base, double /*rotation*/, SDL_Renderer* renderer) const
 {
 	int sheetWidth = sheet->w, sheetHeight = sheet->h;
 	int spritesPerRow = sheetWidth / spriteWidth;
@@ -40,5 +40,6 @@ void UniformSpriteSheet::renderSprite(unsigned sprite, Vector2 position, Vector2
 	dst.w = spriteWidth;
 	dst.h = spriteHeight;
 
+	//SDL_RenderCopyEx(renderer, texture, &src, &dst, rotation * 180 / 3.14159265359, nullptr, SDL_FLIP_NONE);
 	SDL_RenderCopy(renderer, texture, &src, &dst);
 }

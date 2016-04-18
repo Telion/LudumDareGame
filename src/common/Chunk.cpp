@@ -5,7 +5,7 @@
 #include "../client/UniformSpriteSheet.h"
 #include "MyAssert.h"
 
-#include <SDL2/SDL.h>
+#include <SDL/SDL.h>
 #include <cstdio>
 #include <sstream>
 
@@ -86,7 +86,7 @@ void Chunk::render(SDL_Renderer* renderer, const UniformSpriteSheet& spriteSheet
 		position.y = y + tileY;
 
 		if (tiles[i].id != -1)
-			spriteSheet.renderSprite(tiles[i].id, position, base, renderer);
+			spriteSheet.renderSprite(tiles[i].id, position, base, 0, renderer);
 	}
 }
 

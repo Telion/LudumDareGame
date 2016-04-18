@@ -3,7 +3,7 @@
 #include "Tile.h"
 #include "VectorMath.h"
 
-#include <SDL2/SDL.h>
+#include <SDL/SDL.h>
 #include <string>
 #include <vector>
 

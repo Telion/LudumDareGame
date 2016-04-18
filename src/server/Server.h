@@ -26,6 +26,8 @@ class Server
 	World world;
 
 	std::vector<std::shared_ptr<ServerEntity>> entities;
+	std::vector<std::shared_ptr<ServerEntity>> newEntities;
+	std::vector<const ServerEntity*> deletedEntities;
 
 	static const unsigned timestep = 25000;
 	static const unsigned tickTime = 150000;

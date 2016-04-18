@@ -22,7 +22,14 @@ class Client
 
 	SDL_Window* window;
 	SDL_Renderer* renderer;
+
 	const unsigned char* keys;
+	bool mouseClick;
+	int mouseClickX;
+	int mouseClickY;
+	bool mouseDown;
+	int mouseX;
+	int mouseY;
 
 	unsigned lastTime;
 	unsigned remainderTime;
@@ -37,7 +44,6 @@ class Client
 	World world;
 	std::map<long long, CommonEntity> entities;
 
-	std::vector<Action> actionLog;
 	unsigned lastTickTime;
 
 	void handleChunk(const Packet& packet);
@@ -58,9 +64,6 @@ public:
 	void gameLoop();
 
 	void readPackets();
-	void tick(int microseconds);
+	void tick(unsigned time, int delta);
 	void render(unsigned time);
-
-	static const int screenWidth = 960;
-	static const int screenHeight = 720;
 };

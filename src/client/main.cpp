@@ -3,8 +3,6 @@
 #include "Client.h"
 
 #include <stdio.h>
-#include <SDL/SDL.h>
-#include <SDL/SDL_image.h>
 #include <memory>
 
 #include <emscripten.h>
@@ -17,31 +15,6 @@ void gameLoop()
 
 extern "C" int main(int, char**)
 {
-	//clientSocket.reset(new ProcessSocket());
-	//clientSocket->linkToServer(clientSocket);
-
-	//while (!sent || !received)
-	//{
-	//	testTick();
-	//	Server::testTick();
-	//}
-
-
-
-	//SDL_Init(SDL_INIT_VIDEO);
-	//IMG_Init(IMG_INIT_PNG);
-
-	//SDL_Window *window = SDL_CreateWindow("Game", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 768, 576, SDL_WINDOW_SHOWN);
-	//SDL_Surface* windowSurface = SDL_GetWindowSurface(window);
-
-	//SDL_Surface* image = IMG_Load("../../src/client/resources/test.png");
-	//SDL_BlitSurface(image, nullptr, windowSurface, nullptr);
-
-	//SDL_UpdateWindowSurface(window);
-
-	//IMG_Quit();
-	//SDL_Quit();
-
 	emscripten_set_main_loop(gameLoop, 0, false);
 
 	return 0;
