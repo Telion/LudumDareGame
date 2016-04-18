@@ -1,12 +1,14 @@
 #include "ClientManager.h"
 
+#include "ServerEntity.h"
+
 ClientManager& getClientManager()
 {
 	static ClientManager clientManager;
 	return clientManager;
 }
 
-const std::vector<ServerClient>& ClientManager::getClients() const
+std::vector<ServerClient>& ClientManager::getClients()
 {
 	return clients;
 }

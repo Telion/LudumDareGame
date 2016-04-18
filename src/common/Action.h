@@ -2,10 +2,10 @@
 
 #include "VectorMath.h"
 
-class ClientAction
+class Action
 {
 public:
 	unsigned time;
 
-	Position position;
+	Vector2 position;
 };

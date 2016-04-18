@@ -52,7 +52,7 @@ Tile World::getTile(int x, int y) const
 	return chunk.getTile(x, y);
 }
 
-void World::updateLoadedChunks(Position playerPosition, const std::shared_ptr<Socket>& socket)
+void World::updateLoadedChunks(Vector2 playerPosition, const std::shared_ptr<Socket>& socket)
 {
 	auto playerChunk = positionToChunkCoordinates(playerPosition, Chunk::chunkWidth, Chunk::chunkHeight);
 
@@ -88,7 +88,7 @@ void World::updateLoadedChunks(Position playerPosition, const std::shared_ptr<So
 		}
 }
 
-void World::render(SDL_Renderer* renderer, const UniformSpriteSheet& terrainSprites, Position base, int screenWidth, int screenHeight) const
+void World::render(SDL_Renderer* renderer, const UniformSpriteSheet& terrainSprites, Vector2 base, int screenWidth, int screenHeight) const
 {
 	for (auto p : chunks)
 	{

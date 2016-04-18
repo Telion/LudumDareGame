@@ -19,14 +19,13 @@ class Chunk
 
 public:
 	Chunk();
-	Chunk(int x, int y, const std::string& filename);
 	Chunk(int x, int y, const std::vector<Tile>& tiles);
 
 	void markLoading();
 
 	Tile getTile(int x, int y) const;
 
-	void render(SDL_Renderer* renderer, const UniformSpriteSheet& spriteSheet, Position base, int screenWidth, int screenHeight);
+	void render(SDL_Renderer* renderer, const UniformSpriteSheet& spriteSheet, Vector2 base, int screenWidth, int screenHeight);
 
 	bool isValid() const;
 	const std::vector<Tile>& getTiles() const;

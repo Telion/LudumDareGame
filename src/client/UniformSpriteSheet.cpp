@@ -17,7 +17,7 @@ UniformSpriteSheet::UniformSpriteSheet(SDL_Renderer* renderer, const std::string
 	this->spriteHeight = spriteHeight;
 }
 
-void UniformSpriteSheet::renderSprite(unsigned sprite, Position position, Position base, SDL_Renderer* renderer) const
+void UniformSpriteSheet::renderSprite(unsigned sprite, Vector2 position, Vector2 base, SDL_Renderer* renderer) const
 {
 	int sheetWidth = sheet->w, sheetHeight = sheet->h;
 	int spritesPerRow = sheetWidth / spriteWidth;
