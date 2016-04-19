@@ -59,6 +59,14 @@ void ServerEntity::tick(unsigned time, int delta, const World& world, std::vecto
 			}
 		}
 
+		/*TODO if spawners & enemies dead, then alert You Win! Thanks for protecting Pear Castle!*/
+		auto entitiesNearbySpawner = getEntitiesWithin(entities, INFINITY, CommonEntity::Type::spawner);
+		auto entitiesNearbyNinja = getEntitiesWithin(entities, INFINITY, CommonEntity::Type::ninjaPommey);
+			
+		if (entitiesNearbySpawner.size() <= 0 && entitiesNearbyNinja.size() <= 0)
+		{
+			EM_ASM(alert('You win! You have defeated all the ninja pomegranates and portals and protected the Pear Kingdom. For now...'));
+		}
 		return;
 	}
 	else if (common.type == CommonEntity::Type::sword)
@@ -100,7 +108,7 @@ void ServerEntity::tick(unsigned time, int delta, const World& world, std::vecto
 		{
 			lastSpawn = time;
 
-			auto nearbyEnemies = getEntitiesWithin(entities, 96, CommonEntity::Type::ninjaPommey);
+			auto nearbyEnemies = getEntitiesWithin(entities, 120, CommonEntity::Type::ninjaPommey);
 			if (nearbyEnemies.size() < 3)
 			{
 				std::shared_ptr<ServerEntity> enemy(new ServerEntity(CommonEntity::Type::ninjaPommey, Vector2(position.x + (double)rand() / RAND_MAX * 128 - 64, position.y + (double)rand() / RAND_MAX * 128 - 64)));
